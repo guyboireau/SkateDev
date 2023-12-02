@@ -1,0 +1,25 @@
+.skatepark-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    list-style-type: none;
+
+  }
+  
+  .skatepark-item {
+    flex: 0 0 calc(33.3333% - 10px);
+    margin-bottom: 20px;
+    padding-bottom:10px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  border-radius: 10px; 
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    transition: all 0.3s ease-in-out;
+    color: #000;
+    min-width: 400px;
+    min-height: 200px;
+  }
+
+  .skatepark-item:hover {
+    background-color: #e6e6e6;
+  }
