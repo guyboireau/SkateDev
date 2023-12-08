@@ -12,12 +12,12 @@ const Home = () => {
     const [searchName, setSearchName] = useState('');
     const navigate = useNavigate();
 
-
     useEffect(() => {
         fetch('https://maps.ottawa.ca/arcgis/rest/services/Parks_Inventory/MapServer/16/query?outFields=*&where=1%3D1&f=geojson')
+        
             .then(response => response.json())
             .then(data => {
-                const filteredData = data.features.filter((skatepark: { properties: { PARKNAME: string; }; }) => skatepark.properties.PARKNAME.toLowerCase().startsWith(searchName.toLowerCase()));                debugger;
+                const filteredData = data.features.filter((skatepark: { properties: { PARKNAME: string; }; }) => skatepark.properties.PARKNAME.toLowerCase().startsWith(searchName.toLowerCase()));
                 setSkateparks(filteredData);
             })
             .catch(error => console.log(error));
@@ -42,10 +42,7 @@ const Home = () => {
     }, [user, db]);
 
     const handleSearchChange = (event: { target: { value: SetStateAction<string>; }; }) => {
-
-        setSearchName(event.target.value);
-        
-        
+        setSearchName(event.target.value);  
     }
     return (
         <Fragment>

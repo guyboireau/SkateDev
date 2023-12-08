@@ -1,16 +1,33 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
-import { auth } from '../../firebase'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { db } from '../../firebase'
+import {  createUserWithEmailAndPassword, getAuth } from 'firebase/auth'
+import {  collection, doc, setDoc } from 'firebase/firestore'
 
 const RegisterForm = () => {
     const navigate = useNavigate()
-
+    const [name, setName] = useState('')
+    const auth = getAuth();
+    const userRef = collection(db, "user");
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
     const [error, setError] = useState<string | null>(null);
+
+    const addUser = async (newUserId: any) => {
+        if (newUserId) {
+            await setDoc(doc(userRef, newUserId), {
+                name: name,
+                userId: newUserId,
+            })
+            .then(() => setName(''))
+            .catch(err => console.log(err))
+        }
+        else {
+            console.log('No user is signed in');
+        }
+    }
 
     const onSubmit = async () => {
         setError(null)
@@ -18,6 +35,7 @@ const RegisterForm = () => {
         try {
             const newUser = await createUserWithEmailAndPassword(auth, email, password)
             console.log(newUser)
+            addUser(newUser.user?.uid)
             if (newUser.user) {
                 navigate('/login')
             }
@@ -37,6 +55,11 @@ const RegisterForm = () => {
     return (
         <div>
             <h1>Register Form</h1>
+
+            <div>
+                <label>Name</label>
+                <input type="name" value={name} onChange={e => setName(e.target.value)} />
+            </div>
 
             <div>
                 <label>Email</label>
