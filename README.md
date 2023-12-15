@@ -20,7 +20,7 @@ Bienvenue sur SkateDev, la plateforme incontournable pour les passionnés de ska
 - npm 
 
 ## Installation
-1. Clonez le dépôt : `git clone [URL du dépôt]`
+1. Clonez le dépôt : `git clone https://github.com/guyboireau/SkateDev.git`
 2. Installez les dépendances : `npm install`
 3. Lancez le serveur de développement : `npm run dev`
 4. Accédez à l'application via `http://localhost:5173/`
