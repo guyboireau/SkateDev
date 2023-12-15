@@ -1,6 +1,6 @@
 import { Fragment, useContext } from 'react'
 import LoginForm from './pages/LoginForm'
-import UserSettingsForm from './pages/settings/UserSettingsForm'
+import UserSettingsForm from './pages/User/UserSettingsForm'
 import { AuthContext } from './provider/AuthProvider'
 
 const MainApp = () => {

@@ -23,3 +23,24 @@
   .skatepark-item:hover {
     background-color: #e6e6e6;
   }
+
+  .skatepark-type {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 10px 10px 0 0;
+  }
+  .skatepark-type button {
+    margin: auto;
+    border: none;
+    /* background-color: transparent; */
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+  }

@@ -4,13 +4,19 @@ import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { getAuth } from 'firebase/auth';
 import { db } from '../../../firebase';
+import Note from '../../components/Note';
+import Comment from '../../components/Comment';
+
 
 const Park = () => {
   const [comment, setComment] = useState('')
   const [comments, setComments] = useState([])
   const [averageNote, setAverageNote] = useState(0)
   const [noteValue, setNoteValue] = useState(0);
+  const [errCom, setErrCom] = useState<string | null>(null);
+  const [errNote, setErrNote] = useState<string | null>(null);
   const location = useLocation();
+
 
   const park = location.state.skatepark;
   const auth = getAuth();
@@ -29,31 +35,37 @@ const Park = () => {
         date: new Date().toISOString(),
       })
         .then(() => setComment(''))
+        .then(() => window.location.reload())
         .catch(err => console.log(err))
+
     else {
-      console.log('No user is signed in');
+      setErrCom('No user is signed in');
     }
   }
 
+
   const addNote = async (noteValue: number) => {
-    if (user) {
-      await addDoc(NoteRef, {
-        note: noteValue,
-        userId: user?.uid,
-        parkId: park.properties.OBJECTID,
-        date: new Date().toISOString(),
-      })
-        .catch(err => console.log(err))
-    } else {
-      console.log('No user is signed in');
-    }
+  
+      if (user) {
+        await addDoc(NoteRef, {
+          note: noteValue,
+          userId: user?.uid,
+          parkId: park.properties.OBJECTID,
+          date: new Date().toISOString(),
+        })
+        .catch(err => setErrNote(err.message))
+          .then(() => window.location.reload());
+      } 
+      else {
+        setErrNote('No user is signed in');
+      }  
+   
   }
 
   const getAverageNote = async () => {
     const datas = await getDocs(query(NoteRef, where("parkId", "==", park.properties.OBJECTID)));
     const notes = datas.docs.map((note) => note.data().note);
     const average = notes.reduce((a, b) => a + b) / notes.length;
-    //1 decimal
     const averageRounded = Math.round(average * 10) / 10;
     return averageRounded;
   }
@@ -65,7 +77,6 @@ const Park = () => {
       const commentget = await Promise.all(datas.docs.map(async (com) => {
         const userDatas = await getDocs(query(userRef, where("userId", "==", com.data().userId)));
         const user = userDatas.docs.map((user) => user.data());
-        console.log(user);
         return { ...com.data(), userName: user[0].name, user: user[0] };
       }));
       setComments(commentget as never[]);
@@ -99,37 +110,14 @@ const Park = () => {
             <p>Coordonnées : {park.geometry.coordinates[0]}, {park.geometry.coordinates[1]}</p>
             <h2>Notes</h2>
             <div className='rating'>
-              <div>
-                <p>0</p>
-                <input type="radio" name="star" id="star0" onChange={() => setNoteValue(0)} />
-                <label htmlFor="star0"></label>
-              </div>
-              <div>
-                <p>1</p>
-                <input type="radio" name="star" id="star1" onChange={() => setNoteValue(1)} />
-                <label htmlFor="star1"></label>
-              </div>
-              <div>
-                <p>2</p>
-                <input type="radio" name="star" id="star2" onChange={() => setNoteValue(2)} />
-                <label htmlFor="star2"></label>
-              </div>
-              <div>
-                <p>3</p>
-                <input type="radio" name="star" id="star3" onChange={() => setNoteValue(3)} />
-                <label htmlFor="star3"></label>
-              </div>
-              <div>
-                <p>4</p>
-                <input type="radio" name="star" id="star4" onChange={() => setNoteValue(4)} />
-                <label htmlFor="star4"></label>
-              </div>
-              <div>
-                <p>5</p>
-                <input type="radio" name="star" id="star5" onChange={() => setNoteValue(5)} />
-                <label htmlFor="star5"></label>
-              </div>
+              <Note value={0} onValueChange={setNoteValue} />
+              <Note value={1} onValueChange={setNoteValue} />
+              <Note value={2} onValueChange={setNoteValue} />
+              <Note value={3} onValueChange={setNoteValue} />
+              <Note value={4} onValueChange={setNoteValue} />
+              <Note value={5} onValueChange={setNoteValue} />
             </div>
+            {errNote && <p style={{ color: 'red' }}>{errNote}</p>}
             <button onClick={() => addNote(noteValue)}>Noter</button>
             <p>Note moyenne : {averageNote}/5</p>
           </div>
@@ -140,16 +128,13 @@ const Park = () => {
             <label>
               <textarea name="comment" value={comment} onChange={e => setComment(e.target.value)} />
             </label>
+            {errCom && <p style={{ color: 'red' }}>{errCom}</p>}
             <button onClick={OnSubmit} >Envoyer</button>
           </form>
           <ul>
             {comments.length > 0 ? (
               comments.map((comment: any) => (
-                <li key={comment.id}>
-                  <p>{comment.userName}</p>
-                  <p>{comment.comment}</p>
-                  <p>{new Date(comment.date).toLocaleDateString()} </p>
-                </li>
+                <Comment comment={comment} />
               ))) : (<p>Aucun commentaire</p>)}
           </ul>
         </div>

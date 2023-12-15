@@ -5,8 +5,11 @@
     padding: 20px;
     margin: 10px;
     border-radius: 10px;
-    /* box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); */
-  }
+    background-color: transparent;
+    /* background-color: #e6e6e6; */
+    backdrop-filter: blur(10px);
+    
+    }
   
   .skatepark-container h1{
     color: #333;
@@ -35,17 +38,19 @@
   }
 
   .skatepark-container ul {
-    /* border: #333 solid 1px; */
     list-style-type: none;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    max-width: 400px;
+    margin-bottom: 10px;
   }
 
   .skatepark-container li {
     border-bottom: #333 solid 1px;
+    
     padding: 10px;
     text-align: left;
     /* font-size: 1.2em;
@@ -60,7 +65,22 @@
     flex-direction: row;
     justify-content: space-between;
     margin: 10px;
-    background-color: white;
+    /* //transparent */
+    /* background-color: white; */
     padding: 10px;
     border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .note
+  {
+    color: #333;
+    font-size: 1.2em;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .rating h2 {
+    color: #333;
+    font-size: 2em;
+    margin-bottom: 10px;
   }

@@ -8,9 +8,10 @@ import Home from './pages/Home'
 import LoginForm from './pages/LoginForm'
 import Park from './pages/Park/Park'
 import NotFound from './pages/NotFound'
-import UserSettingsForm from './pages/settings/UserSettingsForm'
+import UserSettingsForm from './pages/User/UserSettingsForm'
 import Skatepark from './pages/Park/Skatepark'
 import RegisterForm from './pages/RegisterForm'
+import UserProfile from './pages/User/UserProfile'
 
 
 function App() {
@@ -18,23 +19,27 @@ function App() {
   return (
     <>
       <AuthProvider>
-      <Routes>
-        <Route path='/' element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path='/sign-up' element={<RegisterForm />} />
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/park" element={<Skatepark />} />
-          <Route path="/park/:postId" element={<Park />} />
-          <Route path="/profile" element={
-            <ProtectedRoute>
-              <UserSettingsForm />
-            </ProtectedRoute>
-          } />
-
-          <Route path="*" element={<NotFound />} />
-        </Route>
-      </Routes>
-    </AuthProvider>
+        <Routes>
+          <Route path='/' element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path='/sign-up' element={<RegisterForm />} />
+            <Route path="/login" element={<LoginForm />} />
+            <Route path="/park" element={<Skatepark />} />
+            <Route path="/park/:postId" element={<Park />} />
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <UserProfile />
+              </ProtectedRoute>
+            } />
+            <Route path="/settings" element={
+              <ProtectedRoute>
+                <UserSettingsForm />
+              </ProtectedRoute>
+            } />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+      </AuthProvider>
     </>
   )
 }

@@ -20,6 +20,7 @@ const RegisterForm = () => {
             await setDoc(doc(userRef, newUserId), {
                 name: name,
                 userId: newUserId,
+                email: email,
             })
             .then(() => setName(''))
             .catch(err => console.log(err))
@@ -53,8 +54,8 @@ const RegisterForm = () => {
     }
 
     return (
-        <div>
-            <h1>Register Form</h1>
+        <div className="user-profile">
+            <h1>Sign up</h1>
 
             <div>
                 <label>Name</label>

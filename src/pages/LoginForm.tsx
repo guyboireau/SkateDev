@@ -50,8 +50,8 @@ const LoginForm = () => {
     }
 
     return (
-        <div>
-            <h1>Login Form</h1>
+        <div className='user-profile'>
+            <h1>Login</h1>
 
             <div>
                 <label>Email</label>

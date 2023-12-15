@@ -8,6 +8,8 @@ interface AuthState {
     isLogged: boolean;
     isLoading: boolean;
     userInfos: {
+        bio(bio: any): [any, any];
+        name(name: any): [any, any];
         email: string;
         password: string;
     };

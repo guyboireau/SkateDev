@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react'
 import { AuthContext } from '../../provider/AuthProvider'
-import { LOGOUT, SET_LOADING, UPDATE_USER_INFOS } from '../../reducers/AuthReducer'
+import { SET_LOADING, UPDATE_USER_INFOS } from '../../reducers/AuthReducer'
 import { collection, setDoc } from '@firebase/firestore'
 import { doc } from '@firebase/firestore'
 import { db } from '../../../firebase'
@@ -9,14 +9,11 @@ import { getAuth } from '@firebase/auth'
 const UserSettingsForm = () => {
     const { state, dispatch } = useContext(AuthContext)
     const { userInfos } = state
-    const [name, setName] = useState('')
     const auth = getAuth();
     const user = auth.currentUser;
     const userRef = collection(db, "user");
-  
-
-    const [email, setEmail] = useState(userInfos.email)
-    const [password, setPassword] = useState(userInfos.password)
+    const [bio, setBio] = useState(userInfos.bio)
+    const [name, setName] = useState(userInfos.name)
 
     
 
@@ -25,8 +22,9 @@ const UserSettingsForm = () => {
             await setDoc(doc(userRef, user.uid), {
                 name: name,
                 userId: user.uid,
+                email: user.email,
+                bio: bio,
             })
-            .then(() => setName(''))
             .catch(err => console.log(err))
         }
         else {
@@ -48,20 +46,14 @@ const UserSettingsForm = () => {
         setTimeout(() => {
             dispatch({
                 type: UPDATE_USER_INFOS,
-                payload: { email, password },
+                payload: { name, bio, email: userInfos.email, },
             })
         }, 2000)
     }
 
     return (
-        <div>
-            <h1>User Settings Form</h1>
-            <button onClick={() => dispatch({
-                type: LOGOUT,
-                payload: undefined
-            })}>
-                Logout
-            </button>
+        <div className="user-profile">
+            <h1>User informations</h1>
 
             <div>
                 <label>Name</label>
@@ -69,13 +61,8 @@ const UserSettingsForm = () => {
             </div>
 
             <div>
-                <label>Email</label>
-                <input type="email" value={email} onChange={e => setEmail(e.target.value)}/>
-            </div>
-
-            <div>
-                <label>Password</label>
-                <input type="password" value={password} onChange={e => setPassword(e.target.value)}/>
+                <label>Bio</label>
+                <input type="text" value={bio} onChange={e => setBio(e.target.value)}/>
             </div>
 
             <button onClick={onSubmit}>Edit</button>
